@@ -8,7 +8,7 @@ public class Main {
     }
 }
 // Inventory Management Class for the user interface(console)
-InventoryManagement {
+class InventoryManagement {
     public void interfaced() {
         Inventory inventory = new Inventory();
         Scanner scanner = new Scanner(System.in);
