@@ -159,6 +159,7 @@ class Inventory {
             if (checker == 0) {
                 System.out.println("\tThere's no item named '" + itemName + "'");
             }
+            // Asking user if there's still want to check from the list
             System.out.print("\n\tDo you want to check more item?[Yes/No]: ");
             choice = scanner.nextLine();
         } while (choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("y"));
