@@ -9,10 +9,9 @@ public class Main {
 }
 
 class LibraryManagement {
+    Scanner scanner = new Scanner(System.in);
+    Library library = new Library();
     public void interfaced() {
-        Scanner scanner = new Scanner(System.in);
-        Library library = new Library();
-        Book book = new Book();
 
         String choice2;
         int choice = 0;
@@ -38,8 +37,8 @@ class LibraryManagement {
             } while (!isValid);
 
             switch (choice) {
-                case 1 -> book.addBook();
-                case 2 -> book.removeBook();
+                case 1 -> addBookInterface();
+                case 2 -> removeBookInterface();
                 case 3 -> library.displayBook();
                 case 4 -> library.borrowBook();
                 case 5 -> library.returnBook();
@@ -48,19 +47,47 @@ class LibraryManagement {
             }
         } while (choice != 4);
     }
-}
-class Book {
-    public void addBook() {
 
+    public void addBookInterface() {
+        System.out.print("Enter a Book Title: ");
+        String bookTitle = scanner.nextLine();
+        System.out.print("Enter a Book Author: ");
+        String bookAuthor = scanner.nextLine();
+
+        library.addBook(bookTitle, bookAuthor);
     }
 
-    public void removeBook() {
+    public void removeBookInterface() {
+        System.out.print("Enter a Book ID: ");
+        int bookID = scanner.nextInt();
 
+        library.removeBook(bookID);
     }
 }
 class Library {
+    Book book = new Book();
+    public void addBook(String bookTitle, String bookAuthor) {
+        ArrayList<String> bookList = new ArrayList<>();
+        int bookInt = 0;
+        bookInt++;
+        String bookAvailability = "true";
+
+        String bookID = Integer.toString(bookInt);
+
+        bookList.add(bookID);
+        bookList.add(bookTitle);
+        bookList.add(bookAuthor);
+        bookList.add(bookAvailability);
+
+        book.book(bookList);
+    }
+
+    public void removeBook(int bookID) {
+
+    }
 
     public void displayBook() {
+//        System.out.println("Book ID\t\tBook Title\t\tBook Author\t\tAvailability");
 
     }
 
@@ -70,5 +97,12 @@ class Library {
 
     public void returnBook() {
 
+    }
+}
+
+class Book {
+    ArrayList<ArrayList<String>> books = new ArrayList<>();
+    public void book(ArrayList<String> bookList) {
+        books.add(bookList);
     }
 }
