@@ -55,7 +55,7 @@ class LibraryManagement {
             }
         } while (choice != 6);
     }
-    // Input for adding the book 
+    // Interface for adding the book 
     public void addBookInterface() {
         System.out.print("Enter a Book Title: ");
         String bookTitle = scanner.nextLine();
@@ -66,7 +66,7 @@ class LibraryManagement {
         library.addBook(book);
         System.out.println("You've been successfully added the book '" + bookTitle + "' by " + bookAuthor);
     }
-    // removing the book 
+    // Interface for removing a book 
     public void removeBookInterface() {
         // Exception handling that handles if the user enter a wrong input  
         do {
@@ -87,7 +87,7 @@ class LibraryManagement {
     public void displayBookInterface() {
         library.displayBook();
     }
-    // borrowing book 
+    // Interface for borrowing a book 
     public void borrowBookInterface() {
         do {
             try {
@@ -102,7 +102,7 @@ class LibraryManagement {
 
         library.borrowBook(bookID);
     }
-    // input for returning the book 
+    // Interface for returning the book 
     public void returnBookInterface() {
         do {
             try {
@@ -148,7 +148,7 @@ class Library {
             }
         }
     }
-    
+    // Handle the process of borrowing a book to library
     public void borrowBook(int bookID) {
         for (Book book : books) {
             if (book.getId() == bookID) {
@@ -182,35 +182,36 @@ class Library {
 }
 
 class Book {
+    // Private Initialization for private access
     private static int nextID = 1;
     private final int bookID;
     private final String bookTitle;
     private final String bookAuthor;
     private boolean available;
-
+    // Books' Attribute Setter
     public Book(String title, String author) {
         this.bookID = nextID++;
         this.bookTitle = title;
         this.bookAuthor = author;
         this.available = true;
     }
-
+    // BookID Getter
     public int getId() {
         return bookID;
     }
-
+    // BookTitle Getter
     public String getTitle() {
         return bookTitle;
     }
-
+    // BookAuthor Getter
     public String getAuthor() {
         return bookAuthor;
     }
-
+    // Book Availability Getter
     public boolean isAvailable() {
         return available;
     }
-
+    // Book Availability Setter to change the status of the book
     public void setAvailable(boolean available) {
         this.available = available;
     }
