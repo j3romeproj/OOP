@@ -116,7 +116,7 @@ class Inventory {
     public void addItem(String itemName, int itemQuantity2) {
         int tempItemQuantity = 0;
         checker = 0;
-        // A Linear Search Algorithm that search and combine all the similar item inputted in the Inventory
+       // A Linear Search Algorithm that search and combine all the similar item inputted in the Inventory
         sizes = items.size();
         size = sizes - 1;
         for (int i = 0; i <= size; i++) {
