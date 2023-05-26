@@ -11,8 +11,10 @@ public class Main {
 class InventoryManagement {
     Inventory inventory = new Inventory();
     Scanner scanner = new Scanner(System.in);
+    
     boolean isValid;
     String tempChoice;
+    
     public void interfaced() {
         int choice = 0;
         do {
