@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 // Main Class
 public class Main {
@@ -10,23 +11,27 @@ public class Main {
 
 class LibraryManagement {
     Scanner scanner = new Scanner(System.in);
-    Library library = new Library();
+    Library library;
+    boolean isValid;
+    int bookID = 0;
+    public LibraryManagement() {
+        this.library = new Library();
+    }
     public void interfaced() {
 
         String choice2;
         int choice = 0;
-        boolean isValid;
         do {
             do {
                 try{
-                    System.out.println("\n--- Library Management System ---");
+                    System.out.println("\nLibrary Management System");
                     System.out.println("1. Add a book");
                     System.out.println("2. Remove a book");
                     System.out.println("3. Display available books");
                     System.out.println("4. Borrow a book");
                     System.out.println("5. Return a book");
                     System.out.println("6. Exit");
-                    System.out.print("Enter your choice (1-6): ");
+                    System.out.print("Enter your choice: ");
                     choice2 = scanner.nextLine();
                     choice = Integer.parseInt(choice2);
                     isValid = true;
@@ -39,9 +44,9 @@ class LibraryManagement {
             switch (choice) {
                 case 1 -> addBookInterface();
                 case 2 -> removeBookInterface();
-                case 3 -> library.displayBook();
-                case 4 -> library.borrowBook();
-                case 5 -> library.returnBook();
+                case 3 -> displayBookInterface();
+                case 4 -> borrowBookInterface();
+                case 5 -> returnBookInterface();
                 case 6 -> System.out.println("\tExiting the program...");
                 default -> System.out.println("\tInvalid choice. Please try again.");
             }
@@ -54,55 +59,155 @@ class LibraryManagement {
         System.out.print("Enter a Book Author: ");
         String bookAuthor = scanner.nextLine();
 
-        library.addBook(bookTitle, bookAuthor);
+        Book book = new Book(bookTitle, bookAuthor);
+        library.addBook(book);
     }
 
     public void removeBookInterface() {
-        System.out.print("Enter a Book ID: ");
-        int bookID = scanner.nextInt();
+        do {
+            try {
+                System.out.print("Enter a Book ID: ");
+                bookID = scanner.nextInt();
+                isValid = true;
+            } catch (NumberFormatException e) {
+                System.out.println("\n\tYou've entered wrong input. Please try again.\n");
+                isValid = false;
+            }
+        } while (!isValid);
 
         library.removeBook(bookID);
     }
+
+    public void displayBookInterface() {
+        library.displayBook();
+    }
+
+    public void borrowBookInterface() {
+        do {
+            try {
+                System.out.print("Enter the BookID of the book that you wanted to borrow: ");
+                bookID = scanner.nextInt();
+            } catch (NumberFormatException e) {
+                System.out.println("\n\tYou've entered wrong input. Please try again.\n");
+                isValid = false;
+            }
+        } while (!isValid);
+
+        library.borrowBook(bookID);
+    }
+
+    public void returnBookInterface() {
+        do {
+            try {
+                System.out.print("Enter the BookID of the book that you wanted to return: ");
+                bookID = scanner.nextInt();
+            } catch (NumberFormatException e) {
+                System.out.print("\n\tYou've entered wrong input. Please try again.\n");
+                isValid = false;
+            }
+        } while (!isValid);
+        
+        library.returnBook(bookID);
+    }
 }
 class Library {
-    Book book = new Book();
-    public void addBook(String bookTitle, String bookAuthor) {
-        ArrayList<String> bookList = new ArrayList<>();
-        int bookInt = 0;
-        bookInt++;
-        String bookAvailability = "true";
+    private final List<Book> books;
 
-        String bookID = Integer.toString(bookInt);
-
-        bookList.add(bookID);
-        bookList.add(bookTitle);
-        bookList.add(bookAuthor);
-        bookList.add(bookAvailability);
-
-        book.book(bookList);
+    public Library() {
+        this.books = new ArrayList<>();
+    }
+    public void addBook(Book book) {
+        books.add(book);
     }
 
     public void removeBook(int bookID) {
-
+        for (Book book : books) {
+            if (book.getId() == bookID) {
+                books.remove(book);
+                return;
+            }
+        }
     }
 
     public void displayBook() {
-//        System.out.println("Book ID\t\tBook Title\t\tBook Author\t\tAvailability");
+        System.out.println("Available Books:");
+        for (Book book : books) {
+            if (book.isAvailable()) {
+                System.out.println("\nID: " + book.getId() + "\nTitle: " + book.getTitle() + "\nAuthor: " + book.getAuthor() + "\n");
+            }
+        }
 
+        System.out.println("Not Available Books:");
+        for (Book book : books) {
+            if (!book.isAvailable()) {
+                System.out.println("\nID: " + book.getId() + "\nTitle: " + book.getTitle() + "\nAuthor: " + book.getAuthor() + "\n");
+            }
+        }
     }
 
-    public void borrowBook() {
-
+    public void borrowBook(int bookID) {
+        for (Book book : books) {
+            if (book.getId() == bookID) {
+                if (book.isAvailable()) {
+                    book.setAvailable(false);
+                    System.out.println("You've been successfully borrowed the book.");
+                } else {
+                    System.out.println("Sorry, the book is already borrowed. Thank you!");
+                }
+                return;
+            }
+        }
+        System.out.println("Sorry, but book that you entered cannot found.");
     }
 
-    public void returnBook() {
-
+    public void returnBook (int bookID) {
+        for (Book book : books) {
+            if (book.getId() == bookID) {
+                if (!book.isAvailable()) {
+                    book.setAvailable(true);
+                    System.out.println("You've been successfully return the book.");
+                } else {
+                    System.out.println("The book is already available. Thank you!");
+                }
+                return;
+            }
+        }
+        System.out.println("Sorry, but book that you entered cannot found.");
     }
+
 }
 
 class Book {
-    ArrayList<ArrayList<String>> books = new ArrayList<>();
-    public void book(ArrayList<String> bookList) {
-        books.add(bookList);
+    private static int nextID = 1;
+    private final int bookID;
+    private final String bookTitle;
+    private final String bookAuthor;
+    private boolean available;
+
+    public Book(String title, String author) {
+        this.bookID = nextID++;
+        this.bookTitle = title;
+        this.bookAuthor = author;
+        this.available = true;
+    }
+
+    public int getId() {
+        return bookID;
+    }
+
+    public String getTitle() {
+        return bookTitle;
+    }
+
+    public String getAuthor() {
+        return bookAuthor;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }
