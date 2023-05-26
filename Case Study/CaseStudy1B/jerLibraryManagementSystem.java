@@ -14,13 +14,14 @@ class LibraryManagement {
     Library library;
     boolean isValid;
     int bookID = 0;
+    String tempBookID;
+    int choice = 0;
     public LibraryManagement() {
         this.library = new Library();
     }
     public void interfaced() {
 
-        String choice2;
-        int choice = 0;
+        String choiceTemp;
         do {
             do {
                 try{
@@ -32,8 +33,8 @@ class LibraryManagement {
                     System.out.println("5. Return a book");
                     System.out.println("6. Exit");
                     System.out.print("Enter your choice: ");
-                    choice2 = scanner.nextLine();
-                    choice = Integer.parseInt(choice2);
+                    choiceTemp = scanner.nextLine();
+                    choice = Integer.parseInt(choiceTemp);
                     isValid = true;
                 } catch (NumberFormatException e) {
                     System.out.print("\n\tYou've entered wrong input. Please try again.\n");
@@ -50,7 +51,7 @@ class LibraryManagement {
                 case 6 -> System.out.println("\tExiting the program...");
                 default -> System.out.println("\tInvalid choice. Please try again.");
             }
-        } while (choice != 4);
+        } while (choice != 6);
     }
 
     public void addBookInterface() {
@@ -61,14 +62,16 @@ class LibraryManagement {
 
         Book book = new Book(bookTitle, bookAuthor);
         library.addBook(book);
+        System.out.println("You've been successfully added the book '" + bookTitle + "' by " + bookAuthor);
     }
 
     public void removeBookInterface() {
         do {
             try {
-                System.out.print("Enter a Book ID: ");
-                bookID = scanner.nextInt();
                 isValid = true;
+                System.out.print("Enter a Book ID: ");
+                tempBookID = scanner.nextLine();
+                bookID = Integer.parseInt(tempBookID);
             } catch (NumberFormatException e) {
                 System.out.println("\n\tYou've entered wrong input. Please try again.\n");
                 isValid = false;
@@ -86,7 +89,8 @@ class LibraryManagement {
         do {
             try {
                 System.out.print("Enter the BookID of the book that you wanted to borrow: ");
-                bookID = scanner.nextInt();
+                tempBookID = scanner.nextLine();
+                bookID = Integer.parseInt(tempBookID);
             } catch (NumberFormatException e) {
                 System.out.println("\n\tYou've entered wrong input. Please try again.\n");
                 isValid = false;
@@ -100,13 +104,14 @@ class LibraryManagement {
         do {
             try {
                 System.out.print("Enter the BookID of the book that you wanted to return: ");
-                bookID = scanner.nextInt();
+                tempBookID = scanner.nextLine();
+                bookID = Integer.parseInt(tempBookID);
             } catch (NumberFormatException e) {
                 System.out.print("\n\tYou've entered wrong input. Please try again.\n");
                 isValid = false;
             }
         } while (!isValid);
-        
+
         library.returnBook(bookID);
     }
 }
@@ -123,23 +128,18 @@ class Library {
     public void removeBook(int bookID) {
         for (Book book : books) {
             if (book.getId() == bookID) {
+                System.out.println("You've been successfully remove the book no. " + book.getId() + " | '" + book.getTitle() +"' by " + book.getAuthor());
                 books.remove(book);
                 return;
             }
         }
+        System.out.println("Sorry, but book that you entered cannot found.");
     }
 
     public void displayBook() {
         System.out.println("Available Books:");
         for (Book book : books) {
             if (book.isAvailable()) {
-                System.out.println("\nID: " + book.getId() + "\nTitle: " + book.getTitle() + "\nAuthor: " + book.getAuthor() + "\n");
-            }
-        }
-
-        System.out.println("Not Available Books:");
-        for (Book book : books) {
-            if (!book.isAvailable()) {
                 System.out.println("\nID: " + book.getId() + "\nTitle: " + book.getTitle() + "\nAuthor: " + book.getAuthor() + "\n");
             }
         }
@@ -150,7 +150,7 @@ class Library {
             if (book.getId() == bookID) {
                 if (book.isAvailable()) {
                     book.setAvailable(false);
-                    System.out.println("You've been successfully borrowed the book.");
+                    System.out.println("You've been successfully borrowed the book no. " + book.getId() + " | '" + book.getTitle() + "' by " + book.getAuthor());
                 } else {
                     System.out.println("Sorry, the book is already borrowed. Thank you!");
                 }
@@ -160,12 +160,13 @@ class Library {
         System.out.println("Sorry, but book that you entered cannot found.");
     }
 
+
     public void returnBook (int bookID) {
         for (Book book : books) {
             if (book.getId() == bookID) {
                 if (!book.isAvailable()) {
                     book.setAvailable(true);
-                    System.out.println("You've been successfully return the book.");
+                    System.out.println("You've been successfully return the book no. " + book.getId() + " the '" + book.getTitle() + "' by " + book.getAuthor());
                 } else {
                     System.out.println("The book is already available. Thank you!");
                 }
@@ -174,7 +175,6 @@ class Library {
         }
         System.out.println("Sorry, but book that you entered cannot found.");
     }
-
 }
 
 class Book {
