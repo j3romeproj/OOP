@@ -125,10 +125,11 @@ class Library {
     public Library() {
         this.books = new ArrayList<>();
     }
+    // Function to add book to the library
     public void addBook(Book book) {
         books.add(book);
     }
-    // to remove book based on ID 
+    // Function to remove book based on ID 
     public void removeBook(int bookID) {
         for (Book book : books) {
             if (book.getId() == bookID) {
@@ -139,7 +140,7 @@ class Library {
         }
         System.out.println("Sorry, but book that you entered cannot found.");
     }
-    // input for displaying the book with info
+    // Function for displaying the book with info
     public void displayBook() {
         System.out.println("Available Books:");
         for (Book book : books) {
