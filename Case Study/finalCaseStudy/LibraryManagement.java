@@ -12,13 +12,15 @@ public class Main {
 class LibraryManagement {
     Scanner scanner = new Scanner(System.in);
     Library library;
+    
     boolean isValid;
-    int bookID = 0;
+    int bookID = 0, choice = 0;
     String tempBookID;
-    int choice = 0;
+    
     public LibraryManagement() {
         this.library = new Library();
     }
+    // Function for table interface
     public void interfaced() {
 
         String choiceTemp;
