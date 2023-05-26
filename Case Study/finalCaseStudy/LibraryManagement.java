@@ -166,7 +166,7 @@ class Library {
             if (book.getId() == bookID) {
                 if (!book.isAvailable()) {
                     book.setAvailable(true);
-                    System.out.println("You've been successfully return the book no. " + book.getId() + " the '" + book.getTitle() + "' by " + book.getAuthor());
+                    System.out.println("You've been successfully return the book no. " + book.getId() + " | '" + book.getTitle() + "' by " + book.getAuthor());
                 } else {
                     System.out.println("The book is already available. Thank you!");
                 }
