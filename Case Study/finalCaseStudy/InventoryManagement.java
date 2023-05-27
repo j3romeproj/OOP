@@ -22,11 +22,12 @@ class InventoryManagement {
             do {
                 try {
                     // Choices
+                    System.out.println("\n\tInventory Management System");
                     System.out.println("\n\t1. Add item to inventory");
                     System.out.println("\t2. Remove item from inventory");
                     System.out.println("\t3. Check quantity of an item");
                     System.out.println("\t4. Exit");
-                    System.out.print("\tEnter your choice: ");
+                    System.out.print("\n\tEnter your choice: ");
                     tempChoice = scanner.nextLine();
                     choice = Integer.parseInt(tempChoice);
                     isValid = true;
