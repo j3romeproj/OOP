@@ -8,15 +8,15 @@ public class Main {
         libraryManagement.interfaced();
     }
 }
-// Library management class for the user interface (console) 
+// Library management class for the user interface (console)
 class LibraryManagement {
     Scanner scanner = new Scanner(System.in);
     Library library;
-    
+
     boolean isValid;
     int bookID = 0, choice = 0;
     String tempBookID;
-    
+
     public LibraryManagement() {
         this.library = new Library();
     }
@@ -28,7 +28,7 @@ class LibraryManagement {
             // exception handling that handles if the user enter a wrong input
             do {
                 try{
-                    // choices 
+                    // choices
                     System.out.println("\nLibrary Management System");
                     System.out.println("1. Add a book");
                     System.out.println("2. Remove a book");
@@ -45,7 +45,7 @@ class LibraryManagement {
                     isValid = false;
                 }
             } while (!isValid);
-            // switch case statement 
+            // switch case statement
             switch (choice) {
                 case 1 -> addBookInterface();
                 case 2 -> removeBookInterface();
@@ -57,7 +57,7 @@ class LibraryManagement {
             }
         } while (choice != 6);
     }
-    // Interface for adding the book 
+    // Interface for adding the book
     public void addBookInterface() {
         System.out.print("Enter a Book Title: ");
         String bookTitle = scanner.nextLine();
@@ -68,9 +68,9 @@ class LibraryManagement {
         library.addBook(book);
         System.out.println("You've been successfully added the book '" + bookTitle + "' by " + bookAuthor);
     }
-    // Interface for removing a book 
+    // Interface for removing a book
     public void removeBookInterface() {
-        // Exception handling that handles if the user enter a wrong input  
+        // Exception handling that handles if the user enter a wrong input
         do {
             try {
                 isValid = true;
@@ -85,11 +85,11 @@ class LibraryManagement {
 
         library.removeBook(bookID);
     }
-    // to display book in library 
+    // to display book in library
     public void displayBookInterface() {
         library.displayBook();
     }
-    // Interface for borrowing a book 
+    // Interface for borrowing a book
     public void borrowBookInterface() {
         do {
             try {
@@ -104,7 +104,7 @@ class LibraryManagement {
 
         library.borrowBook(bookID);
     }
-    // Interface for returning the book 
+    // Interface for returning the book
     public void returnBookInterface() {
         do {
             try {
@@ -120,7 +120,7 @@ class LibraryManagement {
         library.returnBook(bookID);
     }
 }
-// class library to manage the book 
+// class library to manage the book
 class Library {
     private final List<Book> books;
 
@@ -131,12 +131,16 @@ class Library {
     public void addBook(Book book) {
         books.add(book);
     }
-    // Function to remove book based on ID 
+    // Function to remove book based on ID
     public void removeBook(int bookID) {
         for (Book book : books) {
             if (book.getId() == bookID) {
-                System.out.println("You've been successfully remove the book no. " + book.getId() + " | '" + book.getTitle() +"' by " + book.getAuthor());
-                books.remove(book);
+                if (book.isAvailable()) {
+                    System.out.println("You've been successfully remove the book no. " + book.getId() + " | '" + book.getTitle() + "' by " + book.getAuthor());
+                    books.remove(book);
+                } else {
+                    System.out.println("Sorry, please return the book first or the book is in borrowed");
+                }
                 return;
             }
         }
@@ -167,7 +171,7 @@ class Library {
         System.out.println("Sorry, but book that you entered cannot found.");
     }
 
-    // handle the process of returning a book to library 
+    // handle the process of returning a book to library
     public void returnBook (int bookID) {
         for (Book book : books) {
             if (book.getId() == bookID) {
