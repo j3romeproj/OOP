@@ -2,10 +2,17 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+// From the original Inventory Management with 99 lines (without comments) in Case Study
+// I make it optimized and remove unnecessary/repetitive variables and loops
+// and that leaves me with 77 Lines (without comments) with the same functionality
+
 public class Main {
     public static void main(String[] args) {
         // Create an instance of the InventoryManagement class
         InventoryManagement inventoryManagement = new InventoryManagement();
+        // Print name, year and section at the start of the program
+        System.out.println("\nName: Jerriniash Remolona Alpajora");
+        System.out.println("Year and Section: BSIT 2-2");
         // Call the interfaced method to start the inventory management system
         inventoryManagement.interfaced();
     }
@@ -74,7 +81,7 @@ class InventoryManagement {
                 // Call the addItem method of the Inventory class to add the item to the inventory
                 inventory.addItem(itemName, itemQuantity);
             } catch (InputMismatchException e) {
-                System.out.print("\n\tYou've entered wrong input. Please enter a number only.\n");
+                System.out.print("\n\tYou've entered wrong input. Please try again...\n");
                 scanner.nextLine();
             }
             // Ask the user if they want to add more items
