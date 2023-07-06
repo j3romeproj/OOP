@@ -181,16 +181,19 @@ public class Main {
                 String userName = userNameTextField.getText();
                 String password = passwordTextField.getText();
 
-                PasswordManager.savePassword(password);
+                if (websiteName.isEmpty() || userName.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(newFrame, "Please fill in all fields before saving.");
+                } else {
+                    PasswordManager.savePassword(password);
 
-                //ENCRYPTION AND DECRYPTION OF INSERTED PASSWORD.
-                String encryptedPassword = aes_encryption.encrypt(password);
-                String decryptNewPassword= aes_encryption.decrypt(encryptedPassword);
+                    //ENCRYPTION AND DECRYPTION OF INSERTED PASSWORD.
+                    String encryptedPassword = aes_encryption.encrypt(password);
 
-                addAccountData(new AccountData(websiteName, userName, encryptedPassword, decryptNewPassword));
-                saveAccountData();
+                    addAccountData(new AccountData(websiteName, userName, encryptedPassword));
+                    saveAccountData();
 
-                newFrame.dispose();
+                    newFrame.dispose();
+                }
             } catch (Exception exception) {
                 System.out.println(exception.getMessage());
             }
@@ -231,20 +234,24 @@ public class Main {
                         String newUserName = userNameTextField.getText();
                         String newPassword = passwordTextField.getText();
 
-                        //ENCRYPT AND DECRYPT THE NEW PASSWORD.
-                        String encryptNewPassword = aes_encryption.encrypt(newPassword);
-                        String decryptNewPassword = aes_encryption.decrypt(encryptNewPassword);
+                        if (newPassword.isEmpty()) {
+                            JOptionPane.showMessageDialog(mainFrame, "Please fill in all fields before saving.");
+                        } else {
+                            //ENCRYPT AND DECRYPT THE NEW PASSWORD.
+                            String encryptNewPassword = aes_encryption.encrypt(newPassword);
+                            String decryptNewPassword = aes_encryption.decrypt(encryptNewPassword);
 
-                        selectedAccountData.setWebsiteName(newWebsiteName);
-                        selectedAccountData.setUserName(newUserName);
-                        selectedAccountData.setPassword(encryptNewPassword);
-                        selectedAccountData.setPasswords(decryptNewPassword);
+                            selectedAccountData.setWebsiteName(newWebsiteName);
+                            selectedAccountData.setUserName(newUserName);
+                            selectedAccountData.setPassword(encryptNewPassword);
+                            PasswordManager.setPassword(decryptNewPassword, selectedIndex);
 
-                        accountTableModel.setValueAt(newWebsiteName, selectedIndex, 0);
-                        accountTableModel.setValueAt(newUserName, selectedIndex, 1);
-                        accountTableModel.setValueAt(encryptNewPassword, selectedIndex, 2);
+                            accountTableModel.setValueAt(newWebsiteName, selectedIndex, 0);
+                            accountTableModel.setValueAt(newUserName, selectedIndex, 1);
+                            accountTableModel.setValueAt(encryptNewPassword, selectedIndex, 2);
 
-                        saveAccountData();
+                            saveAccountData();
+                        }
                     }
                 } catch (Exception exception) {
                     System.out.println(exception.getMessage());
@@ -333,13 +340,12 @@ class AccountData {
     private String websiteName;
     private String userName;
     private String password;
-    private String passwords;
 
-    public AccountData(String websiteName, String userName, String encryptedPassword, String decryptNewPassword) {
+
+    public AccountData(String websiteName, String userName, String encryptedPassword) {
         this.websiteName = websiteName;
         this.userName = userName;
         this.password = encryptedPassword;
-        this.passwords = decryptNewPassword;
     }
 
     public String getWebsiteName() {
@@ -364,10 +370,6 @@ class AccountData {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setPasswords(String passwords) {
-        this.passwords = passwords;
     }
 
     public Object[] toArray() {
@@ -416,6 +418,11 @@ class AES_ENCRYPTION {
 class PasswordManager {
     private static final String PASSWORD_FILE = "passwords.txt";
     private static final List<String> originalPasswords = new ArrayList<>();
+
+    public static void setPassword(String password, int index) {
+        originalPasswords.set(index, password);
+        savePasswordsToFile();
+    }
 
     public static void savePassword(String password) {
         originalPasswords.add(password);
