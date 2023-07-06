@@ -134,7 +134,7 @@ public class Main {
                 }
             }
         });
-
+        
         mainFrame.add(functionButton, BorderLayout.EAST);
         mainFrame.add(scrollPane, BorderLayout.NORTH);
         mainFrame.add(encryptionToggleButton, BorderLayout.WEST);
@@ -169,6 +169,7 @@ public class Main {
         newButtonPanel.add(newSaveButton);
         newButtonPanel.add(newCancelButton);
 
+        newFrame.setLocationRelativeTo(null);
         newFrame.add(newInputPanel, BorderLayout.NORTH);
         newFrame.add(newButtonPanel, BorderLayout.EAST);
         newFrame.setVisible(true);
